@@ -1,15 +1,20 @@
+DROP TABLE IF EXISTS Citizenship;
+DROP TABLE IF EXISTS Person;
+DROP TABLE IF EXISTS Country;
+DROP TABLE IF EXISTS Continent;
+
 CREATE TABLE Continent (
    id SERIAL PRIMARY KEY,
-   name VARCHAR(100) UNIQUE NOT NULL,
-   total_area NUMERIC NOT NULL CHECK (total_area > 0)
+   name VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE Country (
      id SERIAL PRIMARY KEY,
      name VARCHAR(100) UNIQUE NOT NULL,
-     continent_id INT NOT NULL REFERENCES Continent(id) ON DELETE CASCADE,
-     population BIGINT NOT NULL CHECK (population >= 0),
-     area NUMERIC NOT NULL CHECK (area > 0)
+     continent_id INT NOT NULL,
+     population BIGINT NOT NULL,
+     area DOUBLE PRECISION NOT NULL,
+     FOREIGN KEY (continent_id) REFERENCES Continent(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Person (
@@ -18,7 +23,9 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE Citizenship (
-     person_id INT NOT NULL REFERENCES Person(id) ON DELETE CASCADE,
-     country_id INT NOT NULL REFERENCES Country(id) ON DELETE CASCADE,
-     PRIMARY KEY (person_id, country_id)
+     person_id INT NOT NULL,
+     country_id INT NOT NULL,
+     PRIMARY KEY (person_id, country_id),
+     FOREIGN KEY (person_id) REFERENCES Person(id) ON DELETE CASCADE,
+     FOREIGN KEY (country_id) REFERENCES Country(id) ON DELETE CASCADE
 );
